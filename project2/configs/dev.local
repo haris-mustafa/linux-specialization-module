@@ -1,0 +1,22 @@
+server {
+    listen 80;
+    server_name dev.local;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name dev.local;
+    root /var/www/dev.local;
+    index index.html;
+
+    ssl_certificate /etc/nginx/ssl/devops.crt;
+    ssl_certificate_key /etc/nginx/ssl/devops.key;
+
+    access_log /var/log/nginx/dev.local.access.log;
+    error_log /var/log/nginx/dev.local.error.log;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}

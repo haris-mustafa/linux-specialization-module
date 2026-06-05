@@ -1,0 +1,13 @@
+server {
+    listen 80;
+    server_name monitor.local;
+    root /var/www/monitor.local;
+    index index.html;
+
+    access_log /var/log/nginx/monitor.local.access.log;
+    error_log /var/log/nginx/monitor.local.error.log;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}

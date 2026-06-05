@@ -1,0 +1,16 @@
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), disabled (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+22/tcp                     ALLOW IN    Anywhere                   # Its SSH
+80/tcp                     ALLOW IN    Anywhere                   # HTTP
+443/tcp                    ALLOW IN    Anywhere                   # HTTPS
+53                         ALLOW IN    Anywhere                   # DNS
+22/tcp (v6)                ALLOW IN    Anywhere (v6)              # Its SSH
+80/tcp (v6)                ALLOW IN    Anywhere (v6)              # HTTP
+443/tcp (v6)               ALLOW IN    Anywhere (v6)              # HTTPS
+53 (v6)                    ALLOW IN    Anywhere (v6)              # DNS
+
