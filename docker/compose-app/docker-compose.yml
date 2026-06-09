@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+
+  # MongoDB database container
+  mongodb:
+    image: mongo:6-focal        # official mongo image
+    container_name: mongodb
+    restart: always             # restart if crashes
+    volumes:
+      - mongo_data:/data/db     # persist data even if container restarts
+    networks:
+      - app-network
+
+  # Node.js app container
+  app:
+    build: ./app                # build from our Dockerfile
+    container_name: app
+    restart: always
+    depends_on:
+      - mongodb                 # wait for mongodb to start first
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+
+  # Nginx reverse proxy container
+  nginx:
+    image: nginx:alpine         # official nginx alpine image
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"                 # expose port 80 to outside world
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # mount our config
+    depends_on:
+      - app                     # wait for app to start first
+    networks:
+      - app-network
+
+# Named volume — data persists even when containers stop
+volumes:
+  mongo_data:
+
+# Internal network — containers talk to each other
+# Outside world cannot access mongodb or app directly
+# Only nginx is exposed on port 80
+networks:
+  app-network:
+    driver: bridge
